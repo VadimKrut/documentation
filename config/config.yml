@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: documentation
+server:
+  servlet:
+    context-path: /documentation
+  error:
+    include-message: always
+  port: 2493
+springdoc:
+  api-docs:
+    path: /v1/openapi.json  # Path for the generated OpenAPI JSON documentation
+  swagger-ui:
+    path: /  # Path for the Swagger UI interface
+    disable-swagger-default-url: true  # Disable the default Swagger UI URL
+    doc-expansion: none  # Disable documentation expansion by default
+  pre-loading-enabled: true  # Enable preloading of OpenAPI documentation
+swagger:
+  url:
+    rent: http://localhost:2493/documentation/  # URL for Swagger documentation

@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  app:
+    container_name: documentation
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - SERVER_PORT=2493
+    healthcheck:
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    ports:
+      - "2493:2493"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

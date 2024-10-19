@@ -1,0 +1,2 @@
+insert into documentation.permissions (perm, description) values ('ADMIN', 'Админский доступ в систему') on conflict (perm) where not del do nothing;
+insert into documentation.permissions (perm, description) values ('USER', 'Пользовательский доступ в систему') on conflict (perm) where not del do nothing;

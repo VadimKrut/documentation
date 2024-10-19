@@ -1,6 +1,26 @@
 spring:
   application:
     name: documentation
+  flyway:
+    enabled: true
+    validate-on-migrate: false
+    out-of-order: true
+    baselineOnMigrate: true
+    schemas: documentation
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    username: documentation
+    password: documentation66659
+    url: jdbc:postgresql://postgres:5432/documentation
+    driver-class-name: org.postgresql.Driver
 server:
   servlet:
     context-path: /documentation
@@ -18,3 +38,5 @@ springdoc:
 swagger:
   url:
     rent: http://localhost:2493/documentation/  # URL for Swagger documentation
+jwt:
+  secret: j3bhvh25hufhu6biyu5ifc5hc756u809asf2g224tg2g52ff2tf2g222fsdt22t24

@@ -17,6 +17,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.InputStream;
@@ -25,11 +26,12 @@ import java.io.InputStream;
 @Path("/appeal")
 @Tag(name = "Appeal", description = "API responsible for handling appeals related to transactions.")
 @Produces(MediaType.APPLICATION_JSON)
+@ApiResponse(responseCode = "" + HttpServletResponse.SC_FORBIDDEN, description = "Access denied")
 @ApiResponse(responseCode = "" + HttpServletResponse.SC_INTERNAL_SERVER_ERROR, description = "An error occurred, this functionality is temporarily unavailable")
 public interface AppealController {
 
     @Operation(summary = "Create an appeal",
-            description = "Initiates an appeal for a specific transaction and accepts an optional file related to the appeal.")
+            description = "Initiates an appeal for a specific transaction and accepts an optional file related to the appeal. Для пользователя с ролью USER")
     @POST
     @ApiResponses(value = {
             @ApiResponse(responseCode = "" + HttpServletResponse.SC_OK, description = "The appeal was successfully created",
@@ -41,6 +43,7 @@ public interface AppealController {
                     """)
     })
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @PreAuthorize("hasAuthority('USER')")
     AppealResponseDto createAppeal(
             @Parameter(description = "File to be uploaded related to the appeal.")
             @FormDataParam("file") InputStream fileInputStream,

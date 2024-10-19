@@ -3,13 +3,15 @@ package com.service.documentation.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.service.documentation.entity.auditor.LoggedEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -47,4 +49,39 @@ public class User extends LoggedEntity {
     @ManyToOne(targetEntity = Role.class, fetch = FetchType.EAGER)
     @Schema(description = "Роль пользователя", accessMode = Schema.AccessMode.READ_ONLY)
     private Role role;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Fetch(FetchMode.JOIN)
+    @Schema(description = "Table of relations with the user", accessMode = Schema.AccessMode.READ_ONLY)
+    @OneToMany
+    @JoinColumn(name = "user_id", updatable = false)
+    private List<Appeal> appeals = new ArrayList<>();
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Fetch(FetchMode.JOIN)
+    @Schema(description = "Table of relations with the user", accessMode = Schema.AccessMode.READ_ONLY)
+    @OneToMany
+    @JoinColumn(name = "user_id", updatable = false)
+    private List<Deposit> deposits = new ArrayList<>();
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Fetch(FetchMode.JOIN)
+    @Schema(description = "Table of relations with the user", accessMode = Schema.AccessMode.READ_ONLY)
+    @OneToMany
+    @JoinColumn(name = "user_id", updatable = false)
+    private List<Withdraw> withdraws = new ArrayList<>();
+
+    @PreUpdate
+    @PrePersist
+    void updateBalance() {
+        if (balance == null) {
+            balance = 0.0;
+        }
+    }
 }

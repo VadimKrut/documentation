@@ -8,7 +8,7 @@ import lombok.Data;
 public class WithdrawalResponseDto {
 
     @Schema(description = "Withdrawal amount", example = "10000")
-    private Long amount;
+    private Double amount;
 
     @Schema(description = "Currency for withdrawal", example = "USDT")
     private String currency;

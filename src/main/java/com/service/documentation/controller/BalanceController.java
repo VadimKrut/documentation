@@ -13,6 +13,7 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,15 +21,17 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Balance", description = "API responsible for checking the user's balance.")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@ApiResponse(responseCode = "" + HttpServletResponse.SC_FORBIDDEN, description = "Access denied")
 @ApiResponse(responseCode = "" + HttpServletResponse.SC_INTERNAL_SERVER_ERROR, description = "An error occurred, this functionality is temporarily unavailable")
 public interface BalanceController {
 
     @Operation(summary = "Get current balance",
-            description = "Returns the current balance of the user.")
+            description = "Returns the current balance of the user. Для пользователя с ролью USER")
     @GET
     @ApiResponses(value = {
             @ApiResponse(responseCode = "" + HttpServletResponse.SC_OK, description = "The request was successful",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = BalanceResponseDto.class)))
     })
+    @PreAuthorize("hasAuthority('USER')")
     BalanceResponseDto getBalance();
 }

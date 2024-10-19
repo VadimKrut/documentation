@@ -27,6 +27,7 @@
 		<org.jboss.resteasy.version>6.2.4.Final</org.jboss.resteasy.version>
 		<org.postgresql>42.7.3</org.postgresql>
 		<jjwt.version>0.9.1</jjwt.version>
+		<org.flywaydb>10.20.0</org.flywaydb>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -109,7 +110,7 @@
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-database-postgresql</artifactId>
-			<version>10.20.0</version>
+			<version>${org.flywaydb}</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>

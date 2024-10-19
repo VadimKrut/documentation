@@ -1,5 +1,6 @@
 package com.service.documentation.dto;
 
+import com.service.documentation.enums.MoneyCurrency;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -8,9 +9,15 @@ import lombok.Data;
 public class WithdrawalRequestDto {
 
     @Schema(description = "Withdrawal amount", example = "10000", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long amount;
+    private Double amount;
 
-    @Schema(description = "Currency for withdrawal", example = "USDT", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(
+            description = "Currency of the deposit",
+            allowableValues = "RUB, USD, USDT",
+            type = "string", enumAsRef = true, implementation = MoneyCurrency.class,
+            example = "RUB",
+            requiredMode = Schema.RequiredMode.REQUIRED
+    )
     private String currency;
 
     @Schema(description = "Wallet address", example = "TPAgKFYzRdk83Qocc4gXvEVu4jPKfeuer5", requiredMode = Schema.RequiredMode.REQUIRED)

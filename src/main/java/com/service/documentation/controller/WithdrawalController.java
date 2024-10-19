@@ -37,7 +37,9 @@ public interface WithdrawalController {
                 * currency is missing
                 * wallet address is missing
                 * withdrawalRequest is null
-                """)
+                * The provided value " + enumString + " does not match any existing MoneyCurrency
+                """),
+            @ApiResponse(responseCode = "" + HttpServletResponse.SC_CONFLICT, description = "insufficient balance")
     })
     WithdrawalResponseDto createWithdrawal(
             @Parameter(description = "Withdrawal request details", required = true) @RequestBody WithdrawalRequestDto withdrawalRequest

@@ -15,6 +15,7 @@ import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,24 +24,28 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Deposit", description = "API responsible for deposit operations, allowing clients to create deposit requests and retrieve transaction details such as amounts, currency, time, and other payment information.")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@ApiResponse(responseCode = "" + HttpServletResponse.SC_FORBIDDEN, description = "Access denied")
 @ApiResponse(responseCode = "" + HttpServletResponse.SC_INTERNAL_SERVER_ERROR, description = "An error occurred, this functionality is temporarily unavailable")
 public interface DepositController {
 
     @Operation(summary = "Create a deposit",
-            description = "Initiates a deposit transaction.")
+            description = "Initiates a deposit transaction. Для пользователя с ролью USER")
     @POST
     @ApiResponses(value = {
             @ApiResponse(responseCode = "" + HttpServletResponse.SC_OK, description = "The deposit was successful",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = DepositResponseDto.class))),
             @ApiResponse(responseCode = "" + HttpServletResponse.SC_BAD_REQUEST, description = """
-                * amount is null or invalid
-                * currency is missing
-                * payment_type is missing
-                * notification_url is missing
-                * order_id is missing
-                * depositRequest is null
-                """)
+                    * amount is null or invalid
+                    * currency is missing
+                    * payment_type is missing
+                    * notification_url is missing
+                    * order_id is missing
+                    * depositRequest is null
+                    * The provided value " + enumString + " does not match any existing MoneyCurrency
+                    """),
+            @ApiResponse(responseCode = "" + HttpServletResponse.SC_CONFLICT, description = "Депозит с таким order_id уже существует")
     })
+    @PreAuthorize("hasAuthority('USER')")
     DepositResponseDto createDeposit(
             @Parameter(description = "Deposit request details", required = true) @RequestBody DepositRequestDto depositRequest
     );
